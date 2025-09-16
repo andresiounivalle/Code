@@ -1,0 +1,26 @@
+import requests as r
+import pdfkit
+import os
+import PyPDF2
+
+html_to_pdf = r"C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe"
+config = pdfkit.configuration(wkhtmltopdf=html_to_pdf) # 
+folder = r"C:/Users/Brand/OneDrive - correounivalle.edu.co/Escritorio/Trabajos U/Trabajo de Grado/Libros_Lectura/"
+
+for i, j in zip(range(6,1,-1), range(1,6)):
+    url = "https://telegra.ph/Crónica-de-una-muerte-anunciada-03-07-%s"%(i)
+    path = "Cronicas_Muerte_%s.pdf"%(j)
+    pdfkit.from_url(url,folder+path,configuration= config)
+
+# VOLVERLO UN SOLO PDF
+PDF_Lecumberri = [f"Cronicas_Muerte_{i}.pdf" for i in range(1, 6)]
+Combi = PyPDF2.PdfMerger()
+
+# Añadir cada PDF al archivo final
+for pdf in PDF_Lecumberri:
+    Combi.append(os.path.join(folder, pdf))
+
+# Guardar el PDF combinado
+output_pdf = os.path.join(folder, "CronicasDeUna_Muerte_Anun_GM.pdf")
+Combi.write(output_pdf)
+Combi.close()
